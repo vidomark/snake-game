@@ -9,7 +9,7 @@ public class Snake extends Rectangle {
 
     private final int[] xCoordinates = new int[GamePanel.UNIT_SIZE];
     private final int[] yCoordinates = new int[GamePanel.UNIT_SIZE];
-    int bodyParts = 0;
+    private int bodyParts = 0;
     Direction direction;
 
     public Snake(int x, int y, int WIDTH, int HEIGHT) {
@@ -58,6 +58,24 @@ public class Snake extends Rectangle {
         }
     }
 
+    public boolean selfCollision() {
+        int headX = xCoordinates[0];
+        int headY = yCoordinates[0];
+
+        for (int i = 1; i <= bodyParts; i++) {
+            if (headX == xCoordinates[i] && headY == yCoordinates[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void shrink() {
+        xCoordinates[bodyParts] = 0;
+        yCoordinates[bodyParts] = 0;
+        bodyParts--;
+    }
+
     public void keyPressed(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.VK_W) {
             direction = Direction.UP;
@@ -83,5 +101,25 @@ public class Snake extends Rectangle {
                 graphics.fillRect(xCoordinates[i], yCoordinates[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
             }
         }
+    }
+
+    public int[] getxCoordinates() {
+        return xCoordinates;
+    }
+
+    public int[] getyCoordinates() {
+        return yCoordinates;
+    }
+
+    public int getBodyParts() {
+        return bodyParts;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

@@ -62,6 +62,10 @@ public class GamePanel extends JPanel implements Runnable {
             snake.grow(food);
         }
 
+        if (snake.selfCollision()) {
+            snake.shrink();
+        }
+
         snake.atBorder();
     }
 
