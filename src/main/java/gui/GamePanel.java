@@ -1,6 +1,7 @@
 package gui;
 
 import component.Food;
+import component.Snake;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,12 +17,18 @@ public class GamePanel extends JPanel implements Runnable {
     Random random;
     Thread gameThread;
 
+    Snake snake;
+    int snakeX;
+    int snakeY;
+
     Food food;
     int foodX;
     int foodY;
 
     GamePanel() {
         random = new Random();
+
+        createSnake();
         createFood();
 
         this.setBackground(Color.BLACK);
@@ -30,6 +37,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void createSnake() {
+        snakeX = random.nextInt(GAME_WIDTH / UNIT_SIZE) * UNIT_SIZE;
+        snakeY = random.nextInt(GAME_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+        snake = new Snake(snakeX, snakeY, UNIT_SIZE, UNIT_SIZE);
     }
 
     public void createFood() {
@@ -68,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         food.draw(graphics);
+        snake.draw(graphics);
     }
 
     public void paint(Graphics graphics) {
