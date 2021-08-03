@@ -58,6 +58,10 @@ public class GamePanel extends JPanel implements Runnable {
         food = new Food(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
     }
 
+    public void handleCollision() {
+        snake.atBorder();
+    }
+
     public void move() {
         try {
             snake.move();
@@ -75,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1) {
+                handleCollision();
                 move();
                 repaint();
                 delta--;

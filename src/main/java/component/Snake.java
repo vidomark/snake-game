@@ -26,6 +26,18 @@ public class Snake extends Rectangle {
         }
     }
 
+    public void atBorder() {
+        if (xCoordinates[0] < 0) {
+            xCoordinates[0] = GamePanel.GAME_HEIGHT;
+        } else if (xCoordinates[0] > GamePanel.GAME_HEIGHT) {
+            xCoordinates[0] = 0;
+        } else if (yCoordinates[0] < 0) {
+            yCoordinates[0] = GamePanel.GAME_HEIGHT;
+        } else if (yCoordinates[0] > GamePanel.GAME_WIDTH) {
+            yCoordinates[0] = 0;
+        }
+    }
+
     public void keyPressed(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.VK_W) {
             direction = Direction.UP;
