@@ -1,5 +1,7 @@
 package gui;
 
+import component.Food;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
@@ -14,8 +16,13 @@ public class GamePanel extends JPanel implements Runnable {
     Random random;
     Thread gameThread;
 
+    Food food;
+    int foodX;
+    int foodY;
+
     GamePanel() {
         random = new Random();
+        createFood();
 
         this.setBackground(Color.BLACK);
         this.setPreferredSize(dimension);
@@ -23,6 +30,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void createFood() {
+        foodX = random.nextInt((GAME_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
+        foodY = random.nextInt((GAME_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
+        food = new Food(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
     }
 
     @Override
@@ -40,5 +53,24 @@ public class GamePanel extends JPanel implements Runnable {
                 delta--;
             }
         }
+    }
+
+    public void draw(Graphics graphics) {
+        graphics.setColor(Color.decode("#949494")); // light grey color
+        // draw columns
+        for (int i = 0; i < GAME_HEIGHT / UNIT_SIZE; i++) {
+            graphics.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, GAME_HEIGHT);
+        }
+
+        // draw rows
+        for (int i = 0; i < GAME_WIDTH / UNIT_SIZE; i++) {
+            graphics.drawLine(0, i * UNIT_SIZE, GAME_WIDTH, i * UNIT_SIZE);
+        }
+
+        food.draw(graphics);
+    }
+
+    public void paint(Graphics graphics) {
+        draw(graphics);
     }
 }
