@@ -1,6 +1,8 @@
 package gui;
 
 import component.Food;
+import component.CustomKeyAdapter;
+import component.Snake;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +17,11 @@ public class GamePanel extends JPanel implements Runnable {
     Dimension dimension = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     Random random;
     Thread gameThread;
+    CustomKeyAdapter keyAdapter;
+
+    Snake snake;
+    int snakeX;
+    int snakeY;
 
     Food food;
     int foodX;
@@ -22,20 +29,50 @@ public class GamePanel extends JPanel implements Runnable {
 
     GamePanel() {
         random = new Random();
+
+        createSnake();
         createFood();
+
+        keyAdapter = new CustomKeyAdapter(snake);
 
         this.setBackground(Color.BLACK);
         this.setPreferredSize(dimension);
         this.setFocusable(true);
+        this.addKeyListener(keyAdapter);
 
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void createSnake() {
+        snakeX = random.nextInt(GAME_WIDTH / UNIT_SIZE) * UNIT_SIZE;
+        snakeY = random.nextInt(GAME_HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+        snake = new Snake(snakeX, snakeY, UNIT_SIZE, UNIT_SIZE);
     }
 
     public void createFood() {
         foodX = random.nextInt((GAME_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
         foodY = random.nextInt((GAME_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
         food = new Food(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
+    }
+
+    public void handleCollision() {
+        if (snake.eat(food)) {
+            createFood();
+            snake.grow(food);
+        }
+
+        if (snake.selfCollision()) {
+            snake.shrink();
+        }
+
+        snake.atBorder();
+    }
+
+    public void move() {
+        try {
+            snake.move();
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -49,6 +86,8 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1) {
+                handleCollision();
+                move();
                 repaint();
                 delta--;
             }
@@ -68,6 +107,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         food.draw(graphics);
+        snake.draw(graphics);
     }
 
     public void paint(Graphics graphics) {
