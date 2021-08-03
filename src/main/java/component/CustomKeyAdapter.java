@@ -3,10 +3,10 @@ package component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class MyKeyAdapter extends KeyAdapter {
+public class CustomKeyAdapter extends KeyAdapter {
     private final Snake snake;
 
-    public MyKeyAdapter(Snake snake) {
+    public CustomKeyAdapter(Snake snake) {
         this.snake = snake;
     }
 

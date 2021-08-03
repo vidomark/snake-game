@@ -10,14 +10,34 @@ public class Snake extends Rectangle {
     private final int[] xCoordinates = new int[GamePanel.UNIT_SIZE];
     private final int[] yCoordinates = new int[GamePanel.UNIT_SIZE];
     int bodyParts = 0;
-    int foodEaten;
     Direction direction;
 
     public Snake(int x, int y, int WIDTH, int HEIGHT) {
         super(x, y, WIDTH, HEIGHT);
     }
 
+    public boolean eat(Food food) {
+        if (food.x == xCoordinates[0] && food.y  == yCoordinates[0]) {
+            bodyParts++;
+            return true;
+        }
+        return false;
+    }
+
+    public void grow(Food food) {
+        int x = food.x;
+        int y = food.y;
+
+        xCoordinates[bodyParts] = x; // + 1 to not overwrite the head
+        yCoordinates[bodyParts] = y; // + 1 to not overwrite the head
+    }
+
     public void move() {
+        for(int i = bodyParts;i>0;i--) {
+            xCoordinates[i] = xCoordinates[i-1];
+            yCoordinates[i] = yCoordinates[i-1];
+        }
+
         switch (direction) {
             case UP -> yCoordinates[0] -= GamePanel.UNIT_SIZE;
             case DOWN -> yCoordinates[0] += GamePanel.UNIT_SIZE;

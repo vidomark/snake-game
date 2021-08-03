@@ -1,13 +1,11 @@
 package gui;
 
 import component.Food;
-import component.MyKeyAdapter;
+import component.CustomKeyAdapter;
 import component.Snake;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -19,7 +17,7 @@ public class GamePanel extends JPanel implements Runnable {
     Dimension dimension = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     Random random;
     Thread gameThread;
-    MyKeyAdapter keyAdapter;
+    CustomKeyAdapter keyAdapter;
 
     Snake snake;
     int snakeX;
@@ -35,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
         createSnake();
         createFood();
 
-        keyAdapter = new MyKeyAdapter(snake);
+        keyAdapter = new CustomKeyAdapter(snake);
 
         this.setBackground(Color.BLACK);
         this.setPreferredSize(dimension);
@@ -59,6 +57,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void handleCollision() {
+        if (snake.eat(food)) {
+            createFood();
+            snake.grow(food);
+        }
+
         snake.atBorder();
     }
 
