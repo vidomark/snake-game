@@ -1,10 +1,13 @@
 package gui;
 
 import component.Food;
+import component.MyKeyAdapter;
 import component.Snake;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -16,6 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     Dimension dimension = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     Random random;
     Thread gameThread;
+    MyKeyAdapter keyAdapter;
 
     Snake snake;
     int snakeX;
@@ -31,9 +35,12 @@ public class GamePanel extends JPanel implements Runnable {
         createSnake();
         createFood();
 
+        keyAdapter = new MyKeyAdapter(snake);
+
         this.setBackground(Color.BLACK);
         this.setPreferredSize(dimension);
         this.setFocusable(true);
+        this.addKeyListener(keyAdapter);
 
         gameThread = new Thread(this);
         gameThread.start();
@@ -51,6 +58,12 @@ public class GamePanel extends JPanel implements Runnable {
         food = new Food(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
     }
 
+    public void move() {
+        try {
+            snake.move();
+        } catch (Exception ignored) {}
+    }
+
     @Override
     public void run() {
         long lastTime = System.nanoTime();
@@ -62,6 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1) {
+                move();
                 repaint();
                 delta--;
             }

@@ -3,6 +3,7 @@ package component;
 import gui.GamePanel;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Snake extends Rectangle {
 
@@ -14,6 +15,27 @@ public class Snake extends Rectangle {
 
     public Snake(int x, int y, int WIDTH, int HEIGHT) {
         super(x, y, WIDTH, HEIGHT);
+    }
+
+    public void move() {
+        switch (direction) {
+            case UP -> yCoordinates[0] -= GamePanel.UNIT_SIZE;
+            case DOWN -> yCoordinates[0] += GamePanel.UNIT_SIZE;
+            case LEFT -> xCoordinates[0] -= GamePanel.UNIT_SIZE;
+            case RIGHT -> xCoordinates[0] += GamePanel.UNIT_SIZE;
+        }
+    }
+
+    public void keyPressed(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.VK_W) {
+            direction = Direction.UP;
+        } else if (event.getKeyCode() == KeyEvent.VK_S) {
+            direction = Direction.DOWN;
+        } else if (event.getKeyCode() == KeyEvent.VK_A) {
+            direction = Direction.LEFT;
+        } else if (event.getKeyCode() == KeyEvent.VK_D) {
+            direction = Direction.RIGHT;
+        }
     }
 
     public void draw(Graphics graphics) {
